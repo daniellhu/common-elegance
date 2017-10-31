@@ -3,6 +3,17 @@
 
 ## 包含如下：
 
+### 一个非常全的utils类库
+hutool
+
+```
+<dependency>
+	<groupId>com.xiaoleilu</groupId>
+	<artifactId>hutool-all</artifactId>
+	<version>${hutool-version}</version>
+</dependency>
+```
+
 ### 前后端接口规范
 1. 所有接口都必须返回ResultBean，就是说一开始就考虑好成功和失败的场景。
 2. ResultBean只允许出现在controller，不允许到处传。
