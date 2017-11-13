@@ -7,9 +7,11 @@ package com.yonyou.cloud.common.beans;
  *
  * @param <T>
  */
-public class RestResultResponse<T> extends ResultBean<T> {
+public class RestResultResponse<T> extends ResultBean {
 
-    T data;
+	private static final long serialVersionUID = -3630734380336964442L;
+	
+	T data;
     boolean success;
 
     public boolean isSuccess() {
@@ -40,5 +42,13 @@ public class RestResultResponse<T> extends ResultBean<T> {
         this.data = data;
     }
 
+
+	@Override
+	public String toString() {
+		return "RestResultResponse [data=" + data + ", success=" + success + "]";
+	}
+
+    
+    
 
 }

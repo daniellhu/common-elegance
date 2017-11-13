@@ -9,9 +9,8 @@ import java.util.Date;
  * 
  * @author BENJAMIN
  *
- * @param <T>
  */
-public class ResultBean<T> implements Serializable {
+public class ResultBean implements Serializable {
 
 	public ResultBean() {
 		super();

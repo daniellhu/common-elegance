@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public class PageResultResponse<T> extends ResultBean<T> {
+public class PageResultResponse<T> extends ResultBean {
 
 	private static final long serialVersionUID = 6232459878517227047L;
 	
@@ -68,5 +68,17 @@ public class PageResultResponse<T> extends ResultBean<T> {
         public void setRows(List<T> rows) {
             this.rows = rows;
         }
+
+		@Override
+		public String toString() {
+			return "PageDate [total=" + total + ", rows=" + rows + "]";
+		}
     }
+
+	@Override
+	public String toString() {
+		return "PageResultResponse [data=" + data + "]";
+	}
+    
+    
 }
