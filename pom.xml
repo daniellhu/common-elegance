@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.yonyou.cloud</groupId>
 	<artifactId>common-elegance</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>common</name>
 	<description>优雅编码的common类库</description>
 
