@@ -30,49 +30,48 @@ public class BaseController<Service extends BaseService,Entity> {
     protected HttpServletRequest request;
     
     @Autowired
-    protected Service baseBiz;
+    protected Service baseService;
 
     @RequestMapping(value = "",method = RequestMethod.POST)
     @ResponseBody
     public RestResultResponse<Entity> add(@RequestBody Entity entity){
-        baseBiz.insertSelective(entity);
+        baseService.insertSelective(entity);
         return new RestResultResponse<Entity>().success(true);
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     @ResponseBody
     public RestResultResponse<Entity> get(@PathVariable int id){
-        return new RestResultResponse<Entity>().success(true).data(baseBiz.selectById(id));
+        return new RestResultResponse<Entity>().success(true).data(baseService.selectById(id));
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
     @ResponseBody
     public RestResultResponse<Entity> update(@RequestBody Entity entity){
-        baseBiz.updateSelectiveById(entity);
+        baseService.updateSelectiveById(entity);
         return new RestResultResponse<Entity>().success(true);
     }
+    
     @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public RestResultResponse<Entity> remove(@PathVariable int id){
-        baseBiz.deleteById(id);
+        baseService.deleteById(id);
         return new RestResultResponse<Entity>().success(true);
     }
 
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     @ResponseBody
     public RestResultResponse<List<Entity>> all(){
-        return new RestResultResponse<Entity>().success(true).data(baseBiz.selectListAll());
+        return new RestResultResponse<Entity>().success(true).data(baseService.selectListAll());
     }
-    
     
     @RequestMapping(value = "/page",method = RequestMethod.GET)
     @ResponseBody
     public PageResultResponse<Entity> list(@RequestParam Map<String, Object> params){
         //查询列表数据
         PageQuery query = new PageQuery(params);
-        return baseBiz.selectByQuery(query);
+        return baseService.selectByQuery(query);
     }
-    
     
     public String getCurrentUserName(){
         String authorization = request.getHeader("Authorization");

@@ -24,6 +24,7 @@ import tk.mybatis.mapper.entity.Example;
  * @param <T>
  */
 public abstract class BaseService<M extends Mapper<T>, T> {
+	
     @Autowired
     protected M mapper;
 
