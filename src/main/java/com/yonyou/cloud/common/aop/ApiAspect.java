@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.xiaoleilu.hutool.util.NumberUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
+import com.yonyou.cloud.common.beans.PageResultResponse;
+import com.yonyou.cloud.common.beans.RestResultResponse;
 import com.yonyou.cloud.common.beans.ResultBean;
 import com.yonyou.cloud.common.exception.BizException;
 
@@ -21,8 +23,13 @@ public class ApiAspect {
 
 	@Around("@annotation(com.yonyou.cloud.common.annotation.YcApi)")
 	public Object logServiceAccess(ProceedingJoinPoint pjp) throws Throwable {
-		long start = System.currentTimeMillis();
-
+		
+		long start = System.currentTimeMillis(); //开始时间 记录执行时间
+		
+		/**
+		 * 记录切面的信息
+		 * 
+		 */
 		String className = pjp.getTarget().getClass().getName();
 		String methodName = pjp.getSignature().getName();
 		String fullMethodName = className + "." + methodName;
@@ -32,10 +39,13 @@ public class ApiAspect {
 
 		Object result = null;
 		try {
+			//执行业务逻辑
 			result = pjp.proceed();
-			if (result instanceof ResultBean<?>) {
-				((ResultBean<?>) result).setSuccess(true);
-			}
+			//执行按成，rest设置调用成功
+			//2017.11.13 业务自行设置
+//			if (result instanceof RestResultResponse<?>) {
+//				((RestResultResponse<?>) result).success(true);
+//			}
 		} catch (Throwable e) {
 
 			if (result != null && result instanceof ResultBean) {
@@ -62,12 +72,18 @@ public class ApiAspect {
 			logger.info(fullMethodName + "执行耗时:" + elapsedMilliseconds + " 毫秒");
 		}
 
-		if (result != null && result instanceof ResultBean) {
+		if (result != null && result instanceof RestResultResponse) {
 			((ResultBean<?>) result).setElapsedMilliseconds(elapsedMilliseconds);
 		}
 		try {
-			if (result != null && result instanceof ResultBean) {
-				ResultBean<?> e = (ResultBean<?>) result;
+			if (result != null && result instanceof RestResultResponse) {
+				RestResultResponse<?> e = (RestResultResponse<?>) result;
+				Object data = e.getData();
+				logger.info("返回值：" + data.toString());
+			}
+			
+			if (result != null && result instanceof PageResultResponse) {
+				PageResultResponse<?> e = (PageResultResponse<?>) result;
 				Object data = e.getData();
 				logger.info("返回值：" + data.toString());
 			}
