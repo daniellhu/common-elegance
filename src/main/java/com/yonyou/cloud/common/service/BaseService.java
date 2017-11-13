@@ -1,4 +1,4 @@
-package com.yonyou.cloud.common.biz;
+package com.yonyou.cloud.common.service;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
