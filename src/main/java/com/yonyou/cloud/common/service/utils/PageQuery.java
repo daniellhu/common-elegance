@@ -26,7 +26,7 @@ public class PageQuery extends LinkedHashMap<String, Object> {
         this.remove("page");
         this.remove("limit");
     }
-
+    
 
     public int getPage() {
         return page;
