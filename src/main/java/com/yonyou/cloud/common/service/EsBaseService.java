@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.transport.TransportClient;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -30,7 +34,7 @@ import com.yonyou.cloud.common.service.utils.ESPageQuery;
  * @param <T>
  */
 public abstract class EsBaseService<T> {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private Class<T> entityClass;
@@ -42,7 +46,7 @@ public abstract class EsBaseService<T> {
 		Type genType = getClass().getGenericSuperclass();
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 		entityClass = (Class) params[0];
-		logger.debug("entityClass===="+entityClass.getSimpleName().toLowerCase());
+		logger.debug("entityClass====" + entityClass.getSimpleName().toLowerCase());
 	}
 
 	/**
@@ -54,7 +58,8 @@ public abstract class EsBaseService<T> {
 	 */
 	public T selectOne(String index, String query) {
 
-		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())
+		SearchResponse searchResponse = transportClient.prepareSearch(index)
+				.setTypes(entityClass.getSimpleName().toLowerCase())
 				.setQuery(query == null || query.equals("") ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(query))
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
@@ -70,7 +75,8 @@ public abstract class EsBaseService<T> {
 
 		String queryString = query.getQueryString();
 
-		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())
+		SearchResponse searchResponse = transportClient.prepareSearch(index)
+				.setTypes(entityClass.getSimpleName().toLowerCase())
 				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(queryString))
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
@@ -90,7 +96,7 @@ public abstract class EsBaseService<T> {
 			SearchHit s = searchHits[i];
 
 			Map m = s.getSource();
-			T t=BeanUtil.mapToBean(m, entityClass, true);
+			T t = BeanUtil.mapToBean(m, entityClass, true);
 			l.add(t);
 
 		}
@@ -98,7 +104,7 @@ public abstract class EsBaseService<T> {
 	}
 
 	/**
-	 * 查list
+	 * 查询list
 	 * 
 	 * @param dbName
 	 * @param queryString
@@ -106,7 +112,8 @@ public abstract class EsBaseService<T> {
 	 */
 	public List<T> selectList(String index, String queryString) {
 
-		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())
+		SearchResponse searchResponse = transportClient.prepareSearch(index)
+				.setTypes(entityClass.getSimpleName().toLowerCase())
 				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(queryString))
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).addSort("@timestamp", SortOrder.DESC)// 排序
@@ -121,10 +128,25 @@ public abstract class EsBaseService<T> {
 			s.getSource().get("properties");
 
 			Map m = s.getSource();
-			T t=BeanUtil.mapToBean(m, entityClass, true);
+			T t = BeanUtil.mapToBean(m, entityClass, true);
 			l.add(t);
 		}
 		return l;
+	}
+
+	/**
+	 * 新增
+	 * 
+	 * @param index
+	 * @param t
+	 * @throws JsonProcessingException
+	 */
+	public void insert(String index, T t) throws JsonProcessingException{
+		ObjectMapper mapper = new ObjectMapper();
+
+		IndexResponse indexResponse = transportClient.prepareIndex(index, entityClass.getSimpleName().toLowerCase())
+				.setSource(mapper.writeValueAsString(t)).get();
+		
 	}
 
 	// public T selectById(Object id) {
