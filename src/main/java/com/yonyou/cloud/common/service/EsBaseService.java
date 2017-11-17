@@ -1,5 +1,6 @@
 package com.yonyou.cloud.common.service;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -9,10 +10,11 @@ import java.util.Map;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -21,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaoleilu.hutool.bean.BeanUtil;
 import com.yonyou.cloud.common.beans.PageResultResponse;
 import com.yonyou.cloud.common.service.utils.ESPageQuery;
@@ -70,6 +74,7 @@ public abstract class EsBaseService<T> {
 		return BeanUtil.mapToBean(m, entityClass, true);
 
 	}
+	
 
 	public PageResultResponse<T> pageQuery(ESPageQuery query, String index) {
 
@@ -82,7 +87,7 @@ public abstract class EsBaseService<T> {
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
 				.setSize(query.getLimit())// 分页
 				.addSort(
-						query.getOrderBy() == null || query.getOrderBy().equals("") ? "@timestamp" : query.getOrderBy(),
+						query.getOrderBy() == null || query.getOrderBy().equals("") ? "_id" : query.getOrderBy(),
 						query.getOrderType() == null || query.getOrderType().equals("desc") ? SortOrder.DESC
 								: SortOrder.ASC)
 				.get();
@@ -111,13 +116,20 @@ public abstract class EsBaseService<T> {
 	 * @return
 	 */
 	public List<T> selectList(String index, String queryString) {
-
-		SearchResponse searchResponse = transportClient.prepareSearch(index)
-				.setTypes(entityClass.getSimpleName().toLowerCase())
-				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
-						: QueryBuilders.queryStringQuery(queryString))
-				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).addSort("@timestamp", SortOrder.DESC)// 排序
-				.get();
+//
+//		SearchResponse searchResponse = transportClient.prepareSearch(index)
+//				.setTypes(entityClass.getSimpleName().toLowerCase())
+//				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+//						: QueryBuilders.queryStringQuery(queryString))
+//				.setSearchType(SearchType.QUERY_THEN_FETCH).addSort("_id", SortOrder.DESC)// 排序
+//				.get();
+		
+		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())  
+	            .setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+						: QueryBuilders.queryStringQuery(queryString))  
+	            .setSearchType(SearchType.QUERY_THEN_FETCH)  
+	            .setTimeout(TimeValue.timeValueSeconds(300))
+	            .get();  
 
 		SearchHits hits = searchResponse.getHits();
 		SearchHit[] searchHits = hits.getHits();
@@ -125,8 +137,6 @@ public abstract class EsBaseService<T> {
 		List<T> l = new ArrayList<T>();
 		for (int i = 0; i < searchHits.length; i++) {
 			SearchHit s = searchHits[i];
-			s.getSource().get("properties");
-
 			Map m = s.getSource();
 			T t = BeanUtil.mapToBean(m, entityClass, true);
 			l.add(t);
@@ -141,89 +151,32 @@ public abstract class EsBaseService<T> {
 	 * @param t
 	 * @throws JsonProcessingException
 	 */
-	public void insert(String index, T t) throws JsonProcessingException{
+	public void insert(String index, T t) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 
 		IndexResponse indexResponse = transportClient.prepareIndex(index, entityClass.getSimpleName().toLowerCase())
 				.setSource(mapper.writeValueAsString(t)).get();
-		
+
 	}
 
-	// public T selectById(Object id) {
-	// return mapper.selectByPrimaryKey(id);
-	// }
-	//
-	//
-	// public List<T> selectList(T entity) {
-	// return mapper.select(entity);
-	// }
-	//
-	//
-	// public List<T> selectListAll() {
-	// return mapper.selectAll();
-	// }
-	//
-	//
-	// public Long selectCount(T entity) {
-	// return new Long(mapper.selectCount(entity));
-	// }
-	//
-	//
-	// public void insert(T entity) {
-	// EntityUtils.setCreatAndUpdatInfo(entity);
-	// mapper.insert(entity);
-	// }
-	//
-	//
-	// public void insertSelective(T entity) {
-	// EntityUtils.setCreatAndUpdatInfo(entity);
-	// mapper.insertSelective(entity);
-	// }
-	//
-	//
-	// public void delete(T entity) {
-	// mapper.delete(entity);
-	// }
-	//
-	//
-	// public void deleteById(Object id) {
-	// mapper.deleteByPrimaryKey(id);
-	// }
-	//
-	//
-	// public void updateById(T entity) {
-	// EntityUtils.setUpdatedInfo(entity);
-	// mapper.updateByPrimaryKey(entity);
-	// }
-	//
-	//
-	// public void updateSelectiveById(T entity) {
-	// EntityUtils.setUpdatedInfo(entity);
-	// mapper.updateByPrimaryKeySelective(entity);
-	//
-	// }
-	//
-	// public List<T> selectByExample(Object example) {
-	// return mapper.selectByExample(example);
-	// }
-	//
-	// public int selectCountByExample(Object example) {
-	// return mapper.selectCountByExample(example);
-	// }
-	//
-	// public PageResultResponse<T> selectByQuery(PageQuery query) {
-	// Class<T> clazz = (Class<T>) ((ParameterizedType)
-	// getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-	// Example example = new Example(clazz);
-	// Example.Criteria criteria = example.createCriteria();
-	// for (Map.Entry<String, Object> entry : query.entrySet()) {
-	// criteria.andLike(entry.getKey(), "%" + entry.getValue().toString() +
-	// "%");
-	// }
-	// Page<Object> result = PageHelper.startPage(query.getPage(),
-	// query.getLimit());
-	// List<T> list = mapper.selectByExample(example);
-	// return new PageResultResponse<T>(result.getTotal(), list);
-	// }
+	/**
+	 * 修改
+	 * 
+	 * @param index 索引
+	 * @param t 更新后的doc
+	 * @param id 更新的条件
+	 * @throws IOException
+	 */
+	public void update(String index, T t,String id) throws JsonProcessingException {
+		// XContentBuilder source = XContentFactory.jsonBuilder()
+		// .startObject()
+		// .field("name", "will")
+		// .endObject();
+		ObjectMapper mapper = new ObjectMapper();
+		UpdateResponse updateResponse = transportClient.prepareUpdate(index, entityClass.getSimpleName().toLowerCase(), id)
+				.setDoc(mapper.writeValueAsString(t)).get();
 
+		System.out.println(updateResponse.getVersion());
+
+	}
 }
