@@ -54,7 +54,7 @@ public abstract class EsBaseService<T> {
 	}
 
 	/**
-	 * 查一个 ，多个会报错
+	 * 查一个
 	 * 
 	 * @param index
 	 * @param query
@@ -69,9 +69,19 @@ public abstract class EsBaseService<T> {
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
 				.get();
 
-		SearchHit hits = searchResponse.getHits().getAt(0);
-		Map m = hits.getSource();
-		return BeanUtil.mapToBean(m, entityClass, true);
+		if(searchResponse!=null){
+			if(searchResponse.getHits().getHits().length>0){
+				SearchHit hits = searchResponse.getHits().getAt(0);
+				Map m = hits.getSource();
+				return BeanUtil.mapToBean(m, entityClass, true);
+			}else{
+				return null;
+			}
+			
+		}else{
+			return null;
+		}
+		
 
 	}
 	
