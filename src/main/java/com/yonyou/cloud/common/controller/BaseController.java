@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yonyou.cloud.common.annotation.YcApi;
 import com.yonyou.cloud.common.beans.PageResultResponse;
 import com.yonyou.cloud.common.beans.RestResultResponse;
-import com.yonyou.cloud.common.exception.BizException;
 import com.yonyou.cloud.common.service.BaseService;
 import com.yonyou.cloud.common.service.utils.PageQuery;
 
@@ -40,6 +39,16 @@ public class BaseController<Service extends BaseService,Entity> {
     public RestResultResponse<Entity> add(@RequestBody Entity entity){
         baseService.insertSelective(entity);
         return new RestResultResponse<Entity>().success(true);
+    }
+    
+    
+    
+    @RequestMapping(value = "query",method = RequestMethod.GET)
+    @ResponseBody
+    @YcApi
+    public RestResultResponse<Entity> getByEntity(@RequestParam Map<String, Object> params){
+    	
+        return new RestResultResponse<Entity>().success(true).data(baseService.selectByQuery(params));
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
@@ -75,7 +84,7 @@ public class BaseController<Service extends BaseService,Entity> {
     @RequestMapping(value = "/page",method = RequestMethod.GET)
     @ResponseBody
     @YcApi
-    public PageResultResponse<Entity> list(@RequestParam Map<String, Object> params){
+    public PageResultResponse<Entity> list(@RequestParam(required=false) Map<String, Object> params){
         //查询列表数据
         PageQuery query = new PageQuery(params);
         return baseService.selectByQuery(query);
