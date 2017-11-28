@@ -29,3 +29,23 @@ hutool
 ### 自动生成entity的增删改查的方法
 继承BaseService即可，自动注入常用的createBy、createDate等
 
+
+### 用户信息保存到线程中
+原来都需要在前后端接口中增加useid等和业务无关的字段，影响api简洁，现在通过  
+filter将用户信息从header头中取出来放到threadlocal中，在业务中直接如下可以取到：
+
+```
+UserLocal.getLocalUser();
+```
+
+### 将用户信息自动埋到日志中
+以前在log中查问题总是忘记埋用户信息，现在在common中将用户信息如下方式埋到日志的上下文中
+
+```
+	// 将用户信息放发哦slf4j中，方便日志打印
+	MDC.put(userKey, optUserId);
+```
+
+ 那么在logback.xml中，即可在layout中通过声明“%X{user}”来打印此信息。
+
+
