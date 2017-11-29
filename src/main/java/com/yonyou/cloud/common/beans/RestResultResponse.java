@@ -31,6 +31,7 @@ public class RestResultResponse<T> extends ResultBean {
 
 
     public RestResultResponse data(T data) {
+    	this.setResultCode(200);
         this.setData(data);
         return this;
     }
