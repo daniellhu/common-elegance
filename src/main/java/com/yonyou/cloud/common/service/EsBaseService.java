@@ -22,6 +22,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.elasticsearch.index.query.QueryBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,7 @@ import com.yonyou.cloud.common.service.utils.ESPageQuery;
 public abstract class EsBaseService<T> {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 
 	private Class<T> entityClass;
 
@@ -72,6 +74,40 @@ public abstract class EsBaseService<T> {
 		if(searchResponse!=null){
 			if(searchResponse.getHits().getHits().length>0){
 				SearchHit hits = searchResponse.getHits().getAt(0);
+				
+				Map m = hits.getSource();
+				m.put("_id", hits.getId());
+				return BeanUtil.mapToBean(m, entityClass, true);
+			}else{
+				return null;
+			}
+			
+		}else{
+			return null;
+		}
+		
+
+	}
+	
+	
+	/**
+	 * 查询单个
+	 * 
+	 * @param index
+	 * @param queryBuilder
+	 * @return
+	 */
+	public T selectOne(String index, QueryBuilder queryBuilder) {
+
+		SearchResponse searchResponse = transportClient.prepareSearch(index)
+				.setTypes(entityClass.getSimpleName().toLowerCase())
+				.setQuery(queryBuilder)
+				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
+				.get();
+
+		if(searchResponse!=null){
+			if(searchResponse.getHits().getHits().length>0){
+				SearchHit hits = searchResponse.getHits().getAt(0);
 				Map m = hits.getSource();
 				return BeanUtil.mapToBean(m, entityClass, true);
 			}else{
@@ -86,6 +122,13 @@ public abstract class EsBaseService<T> {
 	}
 	
 
+	/**
+	 * 分页查询
+	 * 
+	 * @param query
+	 * @param index
+	 * @return
+	 */
 	public PageResultResponse<T> pageQuery(ESPageQuery query, String index) {
 
 		String queryString = query.getQueryString();
@@ -117,22 +160,53 @@ public abstract class EsBaseService<T> {
 		}
 		return new PageResultResponse<T>(total, l);
 	}
+	
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param query
+	 * @param index
+	 * @param queryBuilder
+	 * @return
+	 */
+	public PageResultResponse<T> pageQuery(ESPageQuery query, String index, QueryBuilder queryBuilder) {
+
+		SearchResponse searchResponse = transportClient.prepareSearch(index)
+				.setTypes(entityClass.getSimpleName().toLowerCase())
+				.setQuery(queryBuilder)
+				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
+				.setSize(query.getLimit())// 分页
+				.addSort(
+						query.getOrderBy() == null || query.getOrderBy().equals("") ? "_id" : query.getOrderBy(),
+						query.getOrderType() == null || query.getOrderType().equals("desc") ? SortOrder.DESC
+								: SortOrder.ASC)
+				.get();
+
+		SearchHits hits = searchResponse.getHits();
+		long total = hits.getTotalHits();
+		SearchHit[] searchHits = hits.getHits();
+
+		List<T> l = new ArrayList<T>();
+		for (int i = 0; i < searchHits.length; i++) {
+			SearchHit s = searchHits[i];
+
+			Map m = s.getSource();
+			T t = BeanUtil.mapToBean(m, entityClass, true);
+			l.add(t);
+
+		}
+		return new PageResultResponse<T>(total, l);
+	}
 
 	/**
 	 * 查询list
 	 * 
-	 * @param dbName
+	 * @param index
 	 * @param queryString
 	 * @return
 	 */
 	public List<T> selectList(String index, String queryString) {
-//
-//		SearchResponse searchResponse = transportClient.prepareSearch(index)
-//				.setTypes(entityClass.getSimpleName().toLowerCase())
-//				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
-//						: QueryBuilders.queryStringQuery(queryString))
-//				.setSearchType(SearchType.QUERY_THEN_FETCH).addSort("_id", SortOrder.DESC)// 排序
-//				.get();
 		
 		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())  
 	            .setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
@@ -153,6 +227,38 @@ public abstract class EsBaseService<T> {
 		}
 		return l;
 	}
+	
+	
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param index
+	 * @param queryBuilder
+	 * @return
+	 */
+	public List<T> selectList(String index, QueryBuilder queryBuilder) {
+		
+		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())  
+	            .setQuery(queryBuilder)  
+	            .setSearchType(SearchType.QUERY_THEN_FETCH)  
+	            .setTimeout(TimeValue.timeValueSeconds(300))
+	            .get();  
+
+		SearchHits hits = searchResponse.getHits();
+		SearchHit[] searchHits = hits.getHits();
+
+		List<T> l = new ArrayList<T>();
+		for (int i = 0; i < searchHits.length; i++) {
+			SearchHit s = searchHits[i];
+			Map m = s.getSource();
+			T t = BeanUtil.mapToBean(m, entityClass, true);
+			l.add(t);
+		}
+		return l;
+	}
+	
+	
 
 	/**
 	 * 新增
@@ -168,6 +274,8 @@ public abstract class EsBaseService<T> {
 				.setSource(mapper.writeValueAsString(t)).get();
 
 	}
+	
+	
 
 	/**
 	 * 修改
@@ -178,10 +286,6 @@ public abstract class EsBaseService<T> {
 	 * @throws IOException
 	 */
 	public void update(String index, T t,String id) throws JsonProcessingException {
-		// XContentBuilder source = XContentFactory.jsonBuilder()
-		// .startObject()
-		// .field("name", "will")
-		// .endObject();
 		ObjectMapper mapper = new ObjectMapper();
 		UpdateResponse updateResponse = transportClient.prepareUpdate(index, entityClass.getSimpleName().toLowerCase(), id)
 				.setDoc(mapper.writeValueAsString(t)).get();
