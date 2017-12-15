@@ -13,6 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTHelper {
     public static final String JWT_KEY_USER_ID = "userId";
     public static final String JWT_KEY_NAME = "name";
+    public static final String JWT_KEY_REMARK = "remark";
     private static RsaKeyHelper rsaKeyHelper = new RsaKeyHelper();
     /**
      * 密钥加密token
@@ -28,6 +29,7 @@ public class JWTHelper {
                 .setSubject(jwtInfo.getUniqueName())
                 .claim(JWT_KEY_USER_ID, jwtInfo.getId())
                 .claim(JWT_KEY_NAME, jwtInfo.getName())
+                .claim(JWT_KEY_REMARK, jwtInfo.getRemark())
                 .setExpiration(DateTime.now().plusSeconds(expire).toDate())
                 .signWith(SignatureAlgorithm.RS256, rsaKeyHelper.getPrivateKey(priKeyPath))
                 .compact();
@@ -57,7 +59,10 @@ public class JWTHelper {
     public static IJWTInfo getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
-        return new JWTInfo(body.getSubject(), StringHelper.getObjectValue(body.get(JWT_KEY_USER_ID)), StringHelper.getObjectValue(body.get(JWT_KEY_NAME)));
+        return new JWTInfo(body.getSubject(), 
+        		StringHelper.getObjectValue(body.get(JWT_KEY_USER_ID)), 
+        		StringHelper.getObjectValue(body.get(JWT_KEY_NAME)),
+        		StringHelper.getObjectValue(body.get(JWT_KEY_REMARK)));
     }
 
 }

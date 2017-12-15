@@ -21,4 +21,10 @@ public interface IJWTInfo {
      * @return
      */
     String getName();
+
+    /**
+     * 获取备注
+     * @return
+     */
+    String getRemark();
 }

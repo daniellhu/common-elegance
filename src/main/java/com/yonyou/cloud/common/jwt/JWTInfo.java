@@ -9,11 +9,19 @@ public class JWTInfo implements Serializable,IJWTInfo {
     private String username;
     private String userId;
     private String name;
+    private String remark;
 
     public JWTInfo(String username, String userId, String name) {
         this.username = username;
         this.userId = userId;
         this.name = name;
+    }
+
+    public JWTInfo(String username, String userId, String name,String remark) {
+        this.username = username;
+        this.userId = userId;
+        this.name = name;
+        this.remark = remark;
     }
 
     @Override
@@ -43,6 +51,10 @@ public class JWTInfo implements Serializable,IJWTInfo {
         this.name = name;
     }
 
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -67,4 +79,9 @@ public class JWTInfo implements Serializable,IJWTInfo {
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         return result;
     }
+
+	@Override
+	public String getRemark() {
+		return this.remark;
+	}
 }
