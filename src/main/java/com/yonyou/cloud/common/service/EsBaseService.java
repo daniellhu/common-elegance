@@ -161,20 +161,23 @@ public abstract class EsBaseService<T> {
 		return new PageResultResponse<T>(total, l);
 	}
 	
-	
 	/**
 	 * 分页查询
 	 * 
 	 * @param query
 	 * @param index
-	 * @param queryBuilder
+	 * @param filter
 	 * @return
 	 */
-	public PageResultResponse<T> pageQuery(ESPageQuery query, String index, QueryBuilder queryBuilder) {
+	public PageResultResponse<T> pageQuery(ESPageQuery query, String index, QueryBuilder filter) {
+
+		String queryString = query.getQueryString();
 
 		SearchResponse searchResponse = transportClient.prepareSearch(index)
 				.setTypes(entityClass.getSimpleName().toLowerCase())
-				.setQuery(queryBuilder)
+				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+						: QueryBuilders.queryStringQuery(queryString))
+				.setPostFilter(filter)
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
 				.setSize(query.getLimit())// 分页
 				.addSort(
@@ -198,6 +201,8 @@ public abstract class EsBaseService<T> {
 		}
 		return new PageResultResponse<T>(total, l);
 	}
+	
+	
 
 	/**
 	 * 查询list
@@ -227,7 +232,6 @@ public abstract class EsBaseService<T> {
 		}
 		return l;
 	}
-	
 	
 	
 	/**
