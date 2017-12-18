@@ -29,13 +29,13 @@ public class YcFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		log.info("init DMCFilter");
+		log.info("init YcFilter");
 	}
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
-		log.info("DMCFilter is getting userinfo from header");
+		log.info("YcFilter is getting userinfo from header");
 		String optUserId = ((HttpServletRequest) servletRequest).getHeader(headerUserId);// 操作的用户id
 		String optUserName = ((HttpServletRequest) servletRequest).getHeader(headerUserName);// 操作的用户类型
 
@@ -49,7 +49,7 @@ public class YcFilter implements Filter {
 			// 将用户信息放发哦slf4j中，方便日志打印
 			MDC.put(userKey, optUserId);
 
-			log.info("DMCFilter has set userInfo to threadlocal and log");
+			log.info("YcFilter has set userInfo to threadlocal and log");
 		} else {
 			
 			log.warn("this request has no userInfo use default");
