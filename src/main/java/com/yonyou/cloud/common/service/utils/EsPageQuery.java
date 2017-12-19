@@ -10,11 +10,17 @@ import java.util.Map;
  * @author BENJAMIN
  *
  */
-public class ESPageQuery {
+public class EsPageQuery {
 	private static final long serialVersionUID = 1L;
-	//当前页码
+	
+    /**
+     * 默认页面
+     */
     private int page = 1;
-    //每页条数
+    
+    /**
+     * 默认每页数量
+     */
     private int limit = 10;
     
     private String index;

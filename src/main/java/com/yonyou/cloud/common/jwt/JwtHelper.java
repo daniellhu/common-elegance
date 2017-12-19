@@ -13,7 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * @author BENJAMIN
  *
  */
-public class JWTHelper {
+public class JwtHelper {
     public static final String JWT_KEY_USER_ID = "userId";
     public static final String JWT_KEY_NAME = "name";
     public static final String JWT_KEY_REMARK = "remark";
@@ -62,7 +62,7 @@ public class JWTHelper {
     public static IJwtHelper getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
-        return new JWTInfo(body.getSubject(), 
+        return new JwtInfo(body.getSubject(), 
         		StringHelper.getObjectValue(body.get(JWT_KEY_USER_ID)), 
         		StringHelper.getObjectValue(body.get(JWT_KEY_NAME)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_REMARK)));

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Ace on 2017/6/12.
+ * 树形工具
+ * 
+ * @author BENJAMIN
+ *
  */
 public class TreeUtil{
   /**

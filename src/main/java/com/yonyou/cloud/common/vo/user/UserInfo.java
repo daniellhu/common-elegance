@@ -1,9 +1,10 @@
 package com.yonyou.cloud.common.vo.user;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
+ * 用户信息
+ * 
  * @author BENJAMIN
  *
  */
@@ -18,15 +19,6 @@ public class UserInfo implements Serializable {
 	private String description;
 	private String telPhone;
 
-//	public Date getUpdTime() {
-//		return updTime;
-//	}
-//
-//	public void setUpdTime(Date updTime) {
-//		this.updTime = updTime;
-//	}
-//
-//	private Date updTime;
 
 	public String getId() {
 		return id;

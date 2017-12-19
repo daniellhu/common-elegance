@@ -8,19 +8,19 @@ import java.io.Serializable;
  * @author BENJAMIN
  *
  */
-public class JWTInfo implements Serializable,IJwtHelper {
+public class JwtInfo implements Serializable,IJwtHelper {
     private String username;
     private String userId;
     private String name;
     private String remark;
 
-    public JWTInfo(String username, String userId, String name) {
+    public JwtInfo(String username, String userId, String name) {
         this.username = username;
         this.userId = userId;
         this.name = name;
     }
 
-    public JWTInfo(String username, String userId, String name,String remark) {
+    public JwtInfo(String username, String userId, String name,String remark) {
         this.username = username;
         this.userId = userId;
         this.name = name;
@@ -67,7 +67,7 @@ public class JWTInfo implements Serializable,IJwtHelper {
             return false;
         }
 
-        JWTInfo jwtInfo = (JWTInfo) o;
+        JwtInfo jwtInfo = (JwtInfo) o;
 
         if (username != null ? !username.equals(jwtInfo.username) : jwtInfo.username != null) {
             return false;

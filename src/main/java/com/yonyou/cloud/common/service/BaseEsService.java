@@ -29,7 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaoleilu.hutool.bean.BeanUtil;
 import com.yonyou.cloud.common.beans.PageResultResponse;
-import com.yonyou.cloud.common.service.utils.ESPageQuery;
+import com.yonyou.cloud.common.service.utils.EsPageQuery;
 
 /**
  * ES相关基础业务处理类
@@ -69,7 +69,8 @@ public abstract class BaseEsService<T> {
 				.setTypes(entityClass.getSimpleName().toLowerCase())
 				.setQuery(query == null || "".equals(query) ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(query))
-				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
+				// 分页
+				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)
 				.get();
 
 		if(searchResponse!=null){
@@ -131,7 +132,7 @@ public abstract class BaseEsService<T> {
 	 * @param index
 	 * @return
 	 */
-	public PageResultResponse<T> pageQuery(ESPageQuery query, String index) {
+	public PageResultResponse<T> pageQuery(EsPageQuery query, String index) {
 
 		String queryString = query.getQueryString();
 
@@ -172,7 +173,7 @@ public abstract class BaseEsService<T> {
 	 * @param filter
 	 * @return
 	 */
-	public PageResultResponse<T> pageQuery(ESPageQuery query, String index, QueryBuilder filter) {
+	public PageResultResponse<T> pageQuery(EsPageQuery query, String index, QueryBuilder filter) {
 
 		String queryString = query.getQueryString();
 
