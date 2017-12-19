@@ -38,7 +38,7 @@ public class ApiAspect {
 		result = pjp.proceed();
 		// 执行按成，rest设置调用成功
 		if (result instanceof ResultBean) {
-			((ResultBean) result).setResultCode(ResultBean.success);
+			((ResultBean) result).setResultCode(ResultBean.SUCCESS);
 		}
 
 		long end = System.currentTimeMillis();

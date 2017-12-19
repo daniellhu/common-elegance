@@ -17,15 +17,31 @@ import org.slf4j.MDC;
 
 import com.yonyou.cloud.common.vo.user.UserInfo;
 
+/**
+ * 帮助服务将header中的用户信息放到threadlocal中
+ * 同时也放到MDC中方便logback打印日志
+ * 
+ * @author BENJAMIN
+ *
+ */
 @WebFilter(urlPatterns = "/*", filterName = "YcFilter")
 public class YcFilter implements Filter {
 	Logger log = LoggerFactory.getLogger(YcFilter.class);
 
-	private static final String userKey = "user";
+	/**
+	 * MDC中user的key
+	 */
+	private static final String USER_KEY = "user";
 
-	private static final String headerUserId = "userId";
+	/**
+	 * header中的userid
+	 */
+	private static final String HEADER_USER_ID = "userId";
 
-	private static final String headerUserName = "userName";
+	/**
+	 * header中userName
+	 */
+	private static final String HEADER_USER_NAME = "userName";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -36,8 +52,8 @@ public class YcFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		log.info("YcFilter is getting userinfo from header");
-		String optUserId = ((HttpServletRequest) servletRequest).getHeader(headerUserId);// 操作的用户id
-		String optUserName = ((HttpServletRequest) servletRequest).getHeader(headerUserName);// 操作的用户类型
+		String optUserId = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_ID);// 操作的用户id
+		String optUserName = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_NAME);// 操作的用户类型
 
 		UserInfo user = new UserInfo();
 		if (optUserId != null) {
@@ -47,7 +63,7 @@ public class YcFilter implements Filter {
 			UserLocal.setLocalUser(user);
 
 			// 将用户信息放发哦slf4j中，方便日志打印
-			MDC.put(userKey, optUserId);
+			MDC.put(USER_KEY, optUserId);
 
 			log.info("YcFilter has set userInfo to threadlocal and log");
 		} else {
@@ -57,7 +73,7 @@ public class YcFilter implements Filter {
 
 		filterChain.doFilter(servletRequest, servletResponse);
 		
-		MDC.remove(userKey);
+		MDC.remove(USER_KEY);
 
 	}
 

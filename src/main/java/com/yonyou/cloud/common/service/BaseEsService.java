@@ -15,6 +15,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -38,7 +39,7 @@ import com.yonyou.cloud.common.service.utils.ESPageQuery;
  * @param <M>
  * @param <T>
  */
-public abstract class EsBaseService<T> {
+public abstract class BaseEsService<T> {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -48,7 +49,7 @@ public abstract class EsBaseService<T> {
 	@Autowired
 	private TransportClient transportClient;
 
-	public EsBaseService() {
+	public BaseEsService() {
 		Type genType = getClass().getGenericSuperclass();
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 		entityClass = (Class) params[0];
@@ -66,7 +67,7 @@ public abstract class EsBaseService<T> {
 
 		SearchResponse searchResponse = transportClient.prepareSearch(index)
 				.setTypes(entityClass.getSimpleName().toLowerCase())
-				.setQuery(query == null || query.equals("") ? QueryBuilders.matchAllQuery()
+				.setQuery(query == null || "".equals(query) ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(query))
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
 				.get();
@@ -102,7 +103,8 @@ public abstract class EsBaseService<T> {
 		SearchResponse searchResponse = transportClient.prepareSearch(index)
 				.setTypes(entityClass.getSimpleName().toLowerCase())
 				.setQuery(queryBuilder)
-				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)// 分页
+				// 分页
+				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(0).setSize(1)
 				.get();
 
 		if(searchResponse!=null){
@@ -135,13 +137,14 @@ public abstract class EsBaseService<T> {
 
 		SearchResponse searchResponse = transportClient.prepareSearch(index)
 				.setTypes(entityClass.getSimpleName().toLowerCase())
-				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+				.setQuery(queryString == null || "".equals(queryString) ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(queryString))
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
-				.setSize(query.getLimit())// 分页
+				// 分页
+				.setSize(query.getLimit())
 				.addSort(
-						query.getOrderBy() == null || query.getOrderBy().equals("") ? "_id" : query.getOrderBy(),
-						query.getOrderType() == null || query.getOrderType().equals("desc") ? SortOrder.DESC
+						query.getOrderBy() == null || "".equals(query.getOrderBy()) ? "_id" : query.getOrderBy(),
+						query.getOrderType() == null || "desc".equals(query.getOrderType()) ? SortOrder.DESC
 								: SortOrder.ASC)
 				.get();
 
@@ -175,14 +178,15 @@ public abstract class EsBaseService<T> {
 
 		SearchResponse searchResponse = transportClient.prepareSearch(index)
 				.setTypes(entityClass.getSimpleName().toLowerCase())
-				.setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+				.setQuery(queryString == null || "".equals(queryString) ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(queryString))
 				.setPostFilter(filter)
 				.setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(query.getLimit() * (query.getPage() - 1))
-				.setSize(query.getLimit())// 分页
+				// 分页
+				.setSize(query.getLimit())
 				.addSort(
-						query.getOrderBy() == null || query.getOrderBy().equals("") ? "_id" : query.getOrderBy(),
-						query.getOrderType() == null || query.getOrderType().equals("desc") ? SortOrder.DESC
+						query.getOrderBy() == null || "".equals(query.getOrderBy()) ? "_id" : query.getOrderBy(),
+						query.getOrderType() == null || "desc".equals(query.getOrderType()) ? SortOrder.DESC
 								: SortOrder.ASC)
 				.get();
 
@@ -214,7 +218,7 @@ public abstract class EsBaseService<T> {
 	public List<T> selectList(String index, String queryString) {
 		
 		SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(entityClass.getSimpleName().toLowerCase())  
-	            .setQuery(queryString == null || queryString.equals("") ? QueryBuilders.matchAllQuery()
+	            .setQuery(queryString == null || "".equals(queryString) ? QueryBuilders.matchAllQuery()
 						: QueryBuilders.queryStringQuery(queryString))  
 	            .setSearchType(SearchType.QUERY_THEN_FETCH)  
 	            .setTimeout(TimeValue.timeValueSeconds(300))
@@ -275,7 +279,7 @@ public abstract class EsBaseService<T> {
 		ObjectMapper mapper = new ObjectMapper();
 
 		IndexResponse indexResponse = transportClient.prepareIndex(index, entityClass.getSimpleName().toLowerCase())
-				.setSource(mapper.writeValueAsString(t)).get();
+				.setSource(mapper.writeValueAsString(t),XContentType.JSON).get();
 
 	}
 	
@@ -292,7 +296,7 @@ public abstract class EsBaseService<T> {
 	public void update(String index, T t,String id) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		UpdateResponse updateResponse = transportClient.prepareUpdate(index, entityClass.getSimpleName().toLowerCase(), id)
-				.setDoc(mapper.writeValueAsString(t)).get();
+				.setDoc(mapper.writeValueAsString(t),XContentType.JSON).get();
 
 		System.out.println(updateResponse.getVersion());
 

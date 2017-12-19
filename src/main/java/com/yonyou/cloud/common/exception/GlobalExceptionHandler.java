@@ -25,6 +25,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResultBean otherExceptionHandler(HttpServletResponse response, Exception ex) {
         logger.error(ex.getMessage(),ex);
-        return new ResultBean(ResultBean.errorUnknown, ex.getMessage());
+        return new ResultBean(ResultBean.ERROR_UNKNOWN, ex.getMessage());
     }
 }

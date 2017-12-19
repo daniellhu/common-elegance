@@ -47,11 +47,15 @@ private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
         } finally {
 
             try {
-                if(client!=null) client.close();
+                if(client!=null) {
+                		client.close();
+                }
             } catch (IOException e) {
             }
             try {
-                if(resp!=null) resp.close();
+                if(resp!=null) { 
+                		resp.close();
+                }
             } catch (IOException e) {
             }
 
@@ -87,11 +91,15 @@ private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
         } finally {
 
             try {
-                if(client!=null) client.close();
+                if(client!=null) {
+                		client.close();
+                }
             } catch (IOException e) {
             }
             try {
-                if(resp!=null) resp.close();
+                if(resp!=null) {
+                		resp.close();
+                }
             } catch (IOException e) {
             }
 
@@ -125,11 +133,15 @@ private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
 
         } finally {
             try {
-                if (inputStream != null) inputStream.close();
+                if (inputStream != null) {
+                		inputStream.close();
+                }
             } catch (Exception e) {
             }
             try {
-                if (output != null) output.close();
+                if (output != null) {
+                		output.close();
+                }
             } catch (Exception e) {
 
             }

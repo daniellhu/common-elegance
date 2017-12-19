@@ -1,6 +1,7 @@
 package com.yonyou.cloud.common.service.utils;
 
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.Date;
@@ -33,9 +34,10 @@ public class EntityUtils {
 	
 	/**
 	 * 快速将bean的createBy、createDate附上相关值
+	 * @throws UnsupportedEncodingException 
 	 * 
 	 */
-	public static <T> void setCreateInfo(T entity){
+	public static <T> void setCreateInfo(T entity) throws UnsupportedEncodingException{
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		String hostIp = "";
 		String name = "";
@@ -43,7 +45,7 @@ public class EntityUtils {
 		if(request!=null) {
 			hostIp = String.valueOf(request.getHeader("userHost"));
 			name = String.valueOf(request.getHeader("userName"));
-			name = URLDecoder.decode(name);
+			name = URLDecoder.decode(name,null);
 			id = String.valueOf(request.getHeader("userId"));
 		}
 		// 默认属性
@@ -60,9 +62,10 @@ public class EntityUtils {
 
 	/**
 	 * 快速将bean的updateBy、updateDate附上相关值
+	 * @throws UnsupportedEncodingException 
 	 * 
 	 */
-	public static <T> void setUpdatedInfo(T entity){
+	public static <T> void setUpdatedInfo(T entity) throws UnsupportedEncodingException{
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		String hostIp = "";
 		String name = "";
@@ -70,7 +73,7 @@ public class EntityUtils {
 		if(request!=null) {
 			hostIp = String.valueOf(request.getHeader("userHost"));
 			name = String.valueOf(request.getHeader("userName"));
-			name = URLDecoder.decode(name);
+			name = URLDecoder.decode(name,null);
 			id = String.valueOf(request.getHeader("userId"));
 		}
 		// 默认属性

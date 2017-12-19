@@ -2,6 +2,13 @@ package com.yonyou.cloud.common.beans;
 
 import java.util.List;
 
+/**
+ * 翻页的数据对象
+ * 
+ * @author BENJAMIN
+ *
+ * @param <T>
+ */
 public class PageDate<T> {
     long total;
     List<T> rows;

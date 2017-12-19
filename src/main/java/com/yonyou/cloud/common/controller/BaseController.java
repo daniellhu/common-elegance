@@ -25,6 +25,8 @@ import com.yonyou.cloud.common.service.utils.PageQuery;
  * 
  * 默认实现增删改查
  * 
+ * @author BENJAMIN
+ * 
  */
 public class BaseController<Service extends BaseService,Entity> {
     @Autowired

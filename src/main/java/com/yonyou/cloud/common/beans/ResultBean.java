@@ -18,19 +18,28 @@ public class ResultBean implements Serializable {
 
 	private static final long serialVersionUID = -1092646848721671618L;
 
-	public final static Integer success = 200;//API 调用成功
+	/**
+	 * API 调用成功
+	 */
+	public final static Integer SUCCESS = 200;
 	
-	public final static Integer validFaild = 400;// 验证失败
+	/**
+	 * 验证失败
+	 */
+	public final static Integer VALID_FAILD = 400;
 	
-	public final static Integer errorUnknown = 900;//未知错误
+	/**
+	 * 未知错误
+	 */
+	public final static Integer ERROR_UNKNOWN = 900;
 
-	public final static Integer errorDB = 901;
+	public final static Integer ERROR_DB = 901;
 	
 	private Integer resultCode;
 	
 	private String errMsg;
 
-	private long ElapsedMilliseconds;
+	private long elapsedMilliseconds;
 	
 	public ResultBean(Integer resultCode,String errMsg) {
 		this.resultCode=resultCode;
@@ -39,11 +48,11 @@ public class ResultBean implements Serializable {
 	
 
 	public long getElapsedMilliseconds() {
-		return ElapsedMilliseconds;
+		return elapsedMilliseconds;
 	}
 
 	public void setElapsedMilliseconds(long elapsedMilliseconds) {
-		ElapsedMilliseconds = elapsedMilliseconds;
+		elapsedMilliseconds = elapsedMilliseconds;
 	}
 
 
