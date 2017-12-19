@@ -6,7 +6,10 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- * Created by ace on 2017/9/10.
+ * RSA加密工具
+ * 
+ * @author BENJAMIN
+ *
  */
 public class RsaKeyHelper {
     /**

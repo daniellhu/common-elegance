@@ -29,6 +29,8 @@ public class ReflectionUtils {
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 	
 	private static Logger logger = LoggerFactory.getLogger(ReflectionUtils.class);
+	
+	private static final String INVOKER_SPLIT=".";
 
 	/**
 	 * 调用Getter方法.
@@ -36,7 +38,7 @@ public class ReflectionUtils {
 	 */
 	public static Object invokeGetter(Object obj, String propertyName) {
 		Object object = obj;
-		for (String name : StringUtils.split(propertyName, ".")){
+		for (String name : StringUtils.split(propertyName, INVOKER_SPLIT)){
 			String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(name);
 			object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
 		}

@@ -5,6 +5,12 @@ import org.slf4j.LoggerFactory;
 
 import com.yonyou.cloud.common.vo.user.UserInfo;
 
+/**
+ * 用户信息的threadlocal
+ * 
+ * @author BENJAMIN
+ *
+ */
 public class UserLocal {
 	
 	private  static Logger logger = LoggerFactory.getLogger(UserLocal.class);

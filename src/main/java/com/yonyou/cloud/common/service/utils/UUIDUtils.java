@@ -3,7 +3,10 @@ package com.yonyou.cloud.common.service.utils;
 import java.util.UUID;
 
 /**
- * Created by ace on 2017/9/27.
+ * 生成UUID工具
+ * 
+ * @author BENJAMIN
+ *
  */
 public class UUIDUtils {
     public static String[] chars = new String[] { "a", "b", "c", "d", "e", "f",
@@ -13,11 +16,12 @@ public class UUIDUtils {
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z" };
 
-
+    private static final Integer SHORT_UUID_LEN=8;
+    
     public static String generateShortUuid() {
         StringBuffer shortBuffer = new StringBuffer();
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < SHORT_UUID_LEN; i++) {
             String str = uuid.substring(i * 4, i * 4 + 4);
             int x = Integer.parseInt(str, 16);
             shortBuffer.append(chars[x % 0x3E]);

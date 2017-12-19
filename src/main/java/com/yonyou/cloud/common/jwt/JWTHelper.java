@@ -8,7 +8,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
- * Created by ace on 2017/9/10.
+ * JWT工具类
+ * 
+ * @author BENJAMIN
+ *
  */
 public class JWTHelper {
     public static final String JWT_KEY_USER_ID = "userId";
@@ -24,7 +27,7 @@ public class JWTHelper {
      * @return
      * @throws Exception
      */
-    public static String generateToken(IJWTInfo jwtInfo, String priKeyPath, int expire) throws Exception {
+    public static String generateToken(IJwtHelper jwtInfo, String priKeyPath, int expire) throws Exception {
         String compactJws = Jwts.builder()
                 .setSubject(jwtInfo.getUniqueName())
                 .claim(JWT_KEY_USER_ID, jwtInfo.getId())
@@ -56,7 +59,7 @@ public class JWTHelper {
      * @return
      * @throws Exception
      */
-    public static IJWTInfo getInfoFromToken(String token, String pubKeyPath) throws Exception {
+    public static IJwtHelper getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
         return new JWTInfo(body.getSubject(), 

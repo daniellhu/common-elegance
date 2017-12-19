@@ -15,6 +15,12 @@ import com.yonyou.cloud.common.beans.RestResultResponse;
 import com.yonyou.cloud.common.beans.ResultBean;
 import com.yonyou.cloud.common.exception.BizException;
 
+/**
+ * 代理所有API的统一返回
+ * 
+ * @author BENJAMIN
+ *
+ */
 @Component
 @Aspect
 @Order(5)
@@ -23,7 +29,8 @@ public class ApiAspect {
 
 	@Around("@annotation(com.yonyou.cloud.common.annotation.YcApi)")
 	public Object logServiceAccess(ProceedingJoinPoint pjp) throws Throwable {
-		long start = System.currentTimeMillis(); // 开始时间 记录执行时间
+		// 开始时间 记录执行时间
+		long start = System.currentTimeMillis(); 
 
 		/**
 		 * 记录切面的信息

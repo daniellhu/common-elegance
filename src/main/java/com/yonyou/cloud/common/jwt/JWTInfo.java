@@ -3,9 +3,12 @@ package com.yonyou.cloud.common.jwt;
 import java.io.Serializable;
 
 /**
- * Created by ace on 2017/9/10.
+ * JWT
+ * 
+ * @author BENJAMIN
+ *
  */
-public class JWTInfo implements Serializable,IJWTInfo {
+public class JWTInfo implements Serializable,IJwtHelper {
     private String username;
     private String userId;
     private String name;

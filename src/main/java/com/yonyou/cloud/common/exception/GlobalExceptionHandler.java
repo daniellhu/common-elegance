@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yonyou.cloud.common.beans.ResultBean;
 
+/**
+ * 异常的统一返回
+ * 
+ * @author BENJAMIN
+ *
+ */
 @ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {

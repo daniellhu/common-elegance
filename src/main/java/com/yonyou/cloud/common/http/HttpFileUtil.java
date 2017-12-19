@@ -18,9 +18,25 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * HTTP 文件工具
+ * 
+ * @author BENJAMIN
+ *
+ */
 public class HttpFileUtil {
 	
-private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
+
+	/**
+	 * http 状态码 ok
+	 */
+	private static Integer HTTP_CODE_OK=200;
+	
+	/**
+	 * http 状态码 重定向等
+	 */
+	private static Integer HTTP_CODE_MORE=300;
 
     public static String postMedia(String url,String filePath,String filename) throws Exception {
         CloseableHttpClient client = null;
@@ -37,7 +53,7 @@ private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
             post.setEntity(reqEntity);
             resp = client.execute(post);
             int sc = resp.getStatusLine().getStatusCode();
-            if(sc>=200&&sc<300) {
+            if(sc>=HTTP_CODE_OK&&sc<HTTP_CODE_MORE) {
                 String result = EntityUtils.toString(resp.getEntity());
                 return result;
             }
@@ -81,7 +97,7 @@ private static Logger logger = LoggerFactory.getLogger(HttpFileUtil.class);
             post.setEntity(reqEntity);
             resp = client.execute(post);
             int sc = resp.getStatusLine().getStatusCode();
-            if(sc>=200&&sc<300) {
+            if(sc>=HTTP_CODE_OK&&sc<HTTP_CODE_MORE) {
                 String result = EntityUtils.toString(resp.getEntity());
                 return result;
             }

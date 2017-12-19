@@ -8,6 +8,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -23,6 +25,8 @@ import com.xiaoleilu.hutool.util.ReflectUtil;
  */
 public class EntityUtils {
 	
+	private static final Logger logger = LoggerFactory.getLogger(EntityUtils.class);
+	
 	/**
 	 * 快速将bean的createBy、createDate、updateBy、updateDate附上相关值
 	 * 
@@ -37,7 +41,7 @@ public class EntityUtils {
 	 * @throws UnsupportedEncodingException 
 	 * 
 	 */
-	public static <T> void setCreateInfo(T entity) throws UnsupportedEncodingException{
+	public static <T> void setCreateInfo(T entity) {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		String hostIp = "";
 		String name = "";
@@ -45,7 +49,11 @@ public class EntityUtils {
 		if(request!=null) {
 			hostIp = String.valueOf(request.getHeader("userHost"));
 			name = String.valueOf(request.getHeader("userName"));
-			name = URLDecoder.decode(name,null);
+			try {
+				name = URLDecoder.decode(name,null);
+			} catch (UnsupportedEncodingException e) {
+				logger.error("userName 转换失败",e);
+			}
 			id = String.valueOf(request.getHeader("userId"));
 		}
 		// 默认属性
@@ -65,7 +73,7 @@ public class EntityUtils {
 	 * @throws UnsupportedEncodingException 
 	 * 
 	 */
-	public static <T> void setUpdatedInfo(T entity) throws UnsupportedEncodingException{
+	public static <T> void setUpdatedInfo(T entity) {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		String hostIp = "";
 		String name = "";
@@ -73,7 +81,11 @@ public class EntityUtils {
 		if(request!=null) {
 			hostIp = String.valueOf(request.getHeader("userHost"));
 			name = String.valueOf(request.getHeader("userName"));
-			name = URLDecoder.decode(name,null);
+			try {
+				name = URLDecoder.decode(name,null);
+			} catch (UnsupportedEncodingException e) {
+				logger.error("userName 转换失败",e);
+			}
 			id = String.valueOf(request.getHeader("userId"));
 		}
 		// 默认属性

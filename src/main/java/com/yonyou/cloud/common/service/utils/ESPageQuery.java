@@ -5,7 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 查询参数
+ * ES 翻页查询
+ * 
+ * @author BENJAMIN
+ *
  */
 public class ESPageQuery {
 	private static final long serialVersionUID = 1L;

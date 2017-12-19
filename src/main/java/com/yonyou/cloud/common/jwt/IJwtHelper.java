@@ -1,9 +1,12 @@
 package com.yonyou.cloud.common.jwt;
 
 /**
- * Created by ace on 2017/9/10.
+ * 共用JWT用户对象
+ * 
+ * @author BENJAMIN
+ *
  */
-public interface IJWTInfo {
+public interface IJwtHelper {
     /**
      * 获取用户名
      * @return

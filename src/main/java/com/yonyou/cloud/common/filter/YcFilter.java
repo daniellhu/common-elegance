@@ -52,8 +52,10 @@ public class YcFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		log.info("YcFilter is getting userinfo from header");
-		String optUserId = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_ID);// 操作的用户id
-		String optUserName = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_NAME);// 操作的用户类型
+		// 操作的用户id
+		String optUserId = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_ID);
+		// 操作的用户类型
+		String optUserName = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_NAME);
 
 		UserInfo user = new UserInfo();
 		if (optUserId != null) {
