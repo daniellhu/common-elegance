@@ -6,7 +6,7 @@ package com.yonyou.cloud.common.jwt;
  * @author BENJAMIN
  *
  */
-public interface IJwtHelper {
+public interface IJwtInfo {
     /**
      * 获取用户名
      * @return

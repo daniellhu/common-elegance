@@ -8,8 +8,9 @@ import java.io.Serializable;
  * @author BENJAMIN
  *
  */
-public class JwtInfo implements Serializable,IJwtHelper {
-    private String username;
+public class JwtInfo implements Serializable,IJwtInfo {
+	private static final long serialVersionUID = 4561940848549383659L;
+	private String username;
     private String userId;
     private String name;
     private String remark;

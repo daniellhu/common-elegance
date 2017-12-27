@@ -27,7 +27,7 @@ public class JwtHelper {
      * @return
      * @throws Exception
      */
-    public static String generateToken(IJwtHelper jwtInfo, String priKeyPath, int expire) throws Exception {
+    public static String generateToken(IJwtInfo jwtInfo, String priKeyPath, int expire) throws Exception {
         String compactJws = Jwts.builder()
                 .setSubject(jwtInfo.getUniqueName())
                 .claim(JWT_KEY_USER_ID, jwtInfo.getId())
@@ -59,7 +59,7 @@ public class JwtHelper {
      * @return
      * @throws Exception
      */
-    public static IJwtHelper getInfoFromToken(String token, String pubKeyPath) throws Exception {
+    public static IJwtInfo getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
         return new JwtInfo(body.getSubject(), 
