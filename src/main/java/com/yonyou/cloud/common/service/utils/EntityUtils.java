@@ -50,7 +50,7 @@ public class EntityUtils {
 			hostIp = String.valueOf(request.getHeader("userHost"));
 			name = String.valueOf(request.getHeader("userName"));
 			try {
-				name = URLDecoder.decode(name,null);
+				name = URLDecoder.decode(name,"UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				logger.error("userName 转换失败",e);
 			}
