@@ -78,7 +78,7 @@ public abstract class BaseEsService<T> {
 				SearchHit hits = searchResponse.getHits().getAt(0);
 				
 				Map m = hits.getSource();
-				m.put("_id", hits.getId());
+				m.put("id", hits.getId());
 				return BeanUtil.mapToBean(m, entityClass, true);
 			}else{
 				return null;
