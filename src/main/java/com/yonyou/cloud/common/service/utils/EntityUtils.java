@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -42,30 +43,34 @@ public class EntityUtils {
 	 * 
 	 */
 	public static <T> void setCreateInfo(T entity) {
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-		String hostIp = "";
-		String name = "";
-		String id = "";
-		if(request!=null) {
-			hostIp = String.valueOf(request.getHeader("userHost"));
-			name = String.valueOf(request.getHeader("userName"));
-			try {
-				name = URLDecoder.decode(name,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				logger.error("userName 转换失败",e);
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		//防止新建线程获取不到原线程中的数据
+		if(requestAttributes!=null) {
+			HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
+			String hostIp = "";
+			String name = "";
+			String id = "";
+			if(request!=null) {
+				hostIp = String.valueOf(request.getHeader("userHost"));
+				name = String.valueOf(request.getHeader("userName"));
+				try {
+					name = URLDecoder.decode(name,"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					logger.error("userName 转换失败",e);
+				}
+				id = String.valueOf(request.getHeader("userId"));
 			}
-			id = String.valueOf(request.getHeader("userId"));
+			// 默认属性
+			String[] fields = {"createBy","createDate"};
+			Field field = ReflectUtil.getField(entity.getClass(), "createDate");
+			// 默认值
+			Object [] value = null;
+			if(field!=null&&field.getType().equals(Date.class)){
+				value = new Object []{id,new Date()};
+			}
+			// 填充默认属性值
+			setDefaultValues(entity, fields, value);
 		}
-		// 默认属性
-		String[] fields = {"createBy","createDate"};
-		Field field = ReflectUtil.getField(entity.getClass(), "createDate");
-		// 默认值
-		Object [] value = null;
-		if(field!=null&&field.getType().equals(Date.class)){
-			value = new Object []{id,new Date()};
-		}
-		// 填充默认属性值
-		setDefaultValues(entity, fields, value);
 	}
 
 	/**
@@ -74,29 +79,33 @@ public class EntityUtils {
 	 * 
 	 */
 	public static <T> void setUpdatedInfo(T entity) {
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-		String hostIp = "";
-		String name = "";
-		String id = "";
-		if(request!=null) {
-			hostIp = String.valueOf(request.getHeader("userHost"));
-			name = String.valueOf(request.getHeader("userName"));
-			try {
-				name = URLDecoder.decode(name,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				logger.error("userName 转换失败",e);
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		//防止新建线程获取不到原线程中的数据
+		if(requestAttributes!=null) {
+			HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+			String hostIp = "";
+			String name = "";
+			String id = "";
+			if(request!=null) {
+				hostIp = String.valueOf(request.getHeader("userHost"));
+				name = String.valueOf(request.getHeader("userName"));
+				try {
+					name = URLDecoder.decode(name,"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					logger.error("userName 转换失败",e);
+				}
+				id = String.valueOf(request.getHeader("userId"));
 			}
-			id = String.valueOf(request.getHeader("userId"));
+			// 默认属性
+			String[] fields = {"updateBy","updateDate"};
+			Field field = ReflectUtil.getField(entity.getClass(), "updateDate");
+			Object [] value = null;
+			if(field!=null&&field.getType().equals(Date.class)){
+				value = new Object []{id,new Date()};
+			}
+			// 填充默认属性值
+			setDefaultValues(entity, fields, value);
 		}
-		// 默认属性
-		String[] fields = {"updateBy","updateDate"};
-		Field field = ReflectUtil.getField(entity.getClass(), "updateDate");
-		Object [] value = null;
-		if(field!=null&&field.getType().equals(Date.class)){
-			value = new Object []{id,new Date()};
-		}
-		// 填充默认属性值
-		setDefaultValues(entity, fields, value);
 	}
 	/**
 	 * 依据对象的属性数组和值数组对对象的属性进行赋值
