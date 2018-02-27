@@ -26,6 +26,18 @@ public interface IJwtInfo {
     String getName();
 
     /**
+     * 获取名称
+     * @return
+     */
+    String getDealerName();
+
+    /**
+     * 获取名称
+     * @return
+     */
+    String getDealerCode();
+
+    /**
      * 获取备注
      * @return
      */

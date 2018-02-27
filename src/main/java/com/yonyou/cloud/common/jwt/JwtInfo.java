@@ -14,14 +14,20 @@ public class JwtInfo implements Serializable,IJwtInfo {
     private String userId;
     private String name;
     private String remark;
+    private String dealerName;
+    private String dealerCode;
 
-    public JwtInfo(String username, String userId, String name) {
+    public JwtInfo(String username, String userId, String name,String dealerCode,
+    		String dealerName) {
         this.username = username;
         this.userId = userId;
         this.name = name;
+        this.dealerCode=dealerCode;
+        this.dealerName=dealerName;
     }
 
-    public JwtInfo(String username, String userId, String name,String remark) {
+    public JwtInfo(String username, String userId, String name,String dealerCode,
+    		String dealerName,String remark) {
         this.username = username;
         this.userId = userId;
         this.name = name;
@@ -87,5 +93,17 @@ public class JwtInfo implements Serializable,IJwtInfo {
 	@Override
 	public String getRemark() {
 		return this.remark;
+	}
+
+	@Override
+	public String getDealerName() {
+		// TODO Auto-generated method stub
+		return dealerName;
+	}
+
+	@Override
+	public String getDealerCode() {
+		// TODO Auto-generated method stub
+		return dealerCode;
 	}
 }
