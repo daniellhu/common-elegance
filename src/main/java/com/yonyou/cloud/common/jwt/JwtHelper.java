@@ -73,6 +73,7 @@ public class JwtHelper {
         		StringHelper.getObjectValue(body.get(JWT_KEY_NAME)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_DEALERCODE)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_DEALERNAME)),
+        		StringHelper.getObjectValue(body.get(JWT_KEY_TELPHONE)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_REMARK)));
     }
 

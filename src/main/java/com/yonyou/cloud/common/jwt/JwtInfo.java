@@ -18,15 +18,15 @@ public class JwtInfo implements Serializable,IJwtInfo {
     private String dealerCode;
     private String telPhone;
 
-    public JwtInfo(String username, String userId, String name,String dealerCode,
-    		String dealerName,String telPhone) {
-        this.username = username;
-        this.userId = userId;
-        this.name = name;
-        this.dealerCode=dealerCode;
-        this.dealerName=dealerName;
-        this.telPhone=telPhone;
-    }
+//    public JwtInfo(String username, String userId, String name,String dealerCode,
+//    		String dealerName,String telPhone) {
+//        this.username = username;
+//        this.userId = userId;
+//        this.name = name;
+//        this.dealerCode=dealerCode;
+//        this.dealerName=dealerName;
+//        this.telPhone=telPhone;
+//    }
 
     public JwtInfo(String username, String userId, String name,String dealerCode,
     		String dealerName,String telPhone,String remark) {
