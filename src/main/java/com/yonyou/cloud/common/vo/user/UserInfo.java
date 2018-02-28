@@ -18,7 +18,25 @@ public class UserInfo implements Serializable {
 	public String name;
 	private String description;
 	private String telPhone;
+	private String dealerCode;
+	private String dealerName;
 
+
+	public String getDealerName() {
+		return dealerName;
+	}
+
+	public void setDealerName(String dealerName) {
+		this.dealerName = dealerName;
+	}
+
+	public String getDealerCode() {
+		return dealerCode;
+	}
+
+	public void setDealerCode(String dealerCode) {
+		this.dealerCode = dealerCode;
+	}
 
 	public String getId() {
 		return id;
