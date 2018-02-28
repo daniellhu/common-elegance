@@ -19,6 +19,7 @@ public class JwtHelper {
     public static final String JWT_KEY_REMARK = "remark";
     public static final String JWT_KEY_DEALERCODE = "dealerCode";
     public static final String JWT_KEY_DEALERNAME = "dealerName";
+    public static final String JWT_KEY_TELPHONE = "telPhone";
     private static RsaKeyHelper rsaKeyHelper = new RsaKeyHelper();
     /**
      * 密钥加密token
@@ -37,6 +38,7 @@ public class JwtHelper {
                 .claim(JWT_KEY_REMARK, jwtInfo.getRemark())
                 .claim(JWT_KEY_DEALERCODE, jwtInfo.getDealerCode())
                 .claim(JWT_KEY_DEALERNAME, jwtInfo.getDealerName())
+                .claim(JWT_KEY_TELPHONE, jwtInfo.getTelPhone())
                 .setExpiration(DateTime.now().plusSeconds(expire).toDate())
                 .signWith(SignatureAlgorithm.RS256, rsaKeyHelper.getPrivateKey(priKeyPath))
                 .compact();

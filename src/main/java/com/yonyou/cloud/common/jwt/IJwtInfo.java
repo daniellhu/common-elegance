@@ -26,16 +26,21 @@ public interface IJwtInfo {
     String getName();
 
     /**
-     * 获取名称
+     * 获取经销商名称
      * @return
      */
     String getDealerName();
 
     /**
-     * 获取名称
+     * 获取经销商编号
      * @return
      */
     String getDealerCode();
+    /**
+     * 获取phone
+     * @return
+     */
+    String getTelPhone();
 
     /**
      * 获取备注
