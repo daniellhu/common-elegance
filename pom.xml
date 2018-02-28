@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.yonyou.cloud</groupId>
 	<artifactId>common-elegance</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>common</name>
 	<description>优雅编码的common类库</description>
 
@@ -150,7 +150,7 @@
 			<version>4.5.3</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>common-elegance</finalName>
 		<plugins>
@@ -173,8 +173,8 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+
 
 	<distributionManagement>
 		<repository>
@@ -189,6 +189,6 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	
+
 
 </project>
