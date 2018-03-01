@@ -32,7 +32,7 @@ public class JwtHelper {
      */
     public static String generateToken(IJwtInfo jwtInfo, String priKeyPath, int expire) throws Exception {
         String compactJws = Jwts.builder()
-                .setSubject(jwtInfo.getUniqueName())
+                .setSubject(jwtInfo.getUniqueName())//jwt的主题为登录账号
                 .claim(JWT_KEY_USER_ID, jwtInfo.getId())
                 .claim(JWT_KEY_NAME, jwtInfo.getName())
                 .claim(JWT_KEY_REMARK, jwtInfo.getRemark())
@@ -68,7 +68,8 @@ public class JwtHelper {
     public static IJwtInfo getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
-        return new JwtInfo(body.getSubject(), 
+        String userName=body.getSubject();//jwt的主题为登录账号
+        return new JwtInfo(userName, 
         		StringHelper.getObjectValue(body.get(JWT_KEY_USER_ID)), 
         		StringHelper.getObjectValue(body.get(JWT_KEY_NAME)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_DEALERCODE)),
