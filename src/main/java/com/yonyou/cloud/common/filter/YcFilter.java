@@ -35,27 +35,27 @@ public class YcFilter implements Filter {
 	/**
 	 * header中的userid
 	 */
-	private static final String HEADER_USER_ID = "userId";
+	private static final String HEADER_USER_ID = "userid";
 
 	/**
 	 * header中的dealerCode
 	 */
-	private static final String HEADER_DEALER_CODE = "dealerCode";
+	private static final String HEADER_DEALER_CODE = "dealercode";
 	
 	/**
 	 * header中的dealerName
 	 */
-	private static final String HEADER_DEALER_NAME = "dealerName";
+	private static final String HEADER_DEALER_NAME = "dealername";
 
 	/**
 	 * header中的TEL_PHONE
 	 */
-	private static final String HEADER_TEL_PHONE = "telPhone";
+	private static final String HEADER_TEL_PHONE = "telphone";
 
 	/**
 	 * header中userName
 	 */
-	private static final String HEADER_USER_NAME = "userName";
+	private static final String HEADER_USER_NAME = "username";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

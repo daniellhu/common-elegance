@@ -51,14 +51,14 @@ public class EntityUtils {
 			String name = "";
 			String id = "";
 			if(request!=null) {
-				hostIp = String.valueOf(request.getHeader("userHost"));
-				name = String.valueOf(request.getHeader("userName"));
+				hostIp = String.valueOf(request.getHeader("userhost"));
+				name = String.valueOf(request.getHeader("username"));
 				try {
 					name = URLDecoder.decode(name,"UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					logger.error("userName 转换失败",e);
 				}
-				id = String.valueOf(request.getHeader("userId"));
+				id = String.valueOf(request.getHeader("userid"));
 			}
 			// 默认属性
 			String[] fields = {"createBy","createDate"};
@@ -87,14 +87,14 @@ public class EntityUtils {
 			String name = "";
 			String id = "";
 			if(request!=null) {
-				hostIp = String.valueOf(request.getHeader("userHost"));
-				name = String.valueOf(request.getHeader("userName"));
+				hostIp = String.valueOf(request.getHeader("userhost"));
+				name = String.valueOf(request.getHeader("username"));
 				try {
 					name = URLDecoder.decode(name,"UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					logger.error("userName 转换失败",e);
 				}
-				id = String.valueOf(request.getHeader("userId"));
+				id = String.valueOf(request.getHeader("userid"));
 			}
 			// 默认属性
 			String[] fields = {"updateBy","updateDate"};
