@@ -1,6 +1,7 @@
 package com.yonyou.cloud.common.filter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -80,10 +81,10 @@ public class YcFilter implements Filter {
 		UserInfo user = new UserInfo();
 		if (optUserId != null) {
 			user.setId(optUserId);
-			user.setUsername(optUserName);
+			user.setUsername(URLDecoder.decode(optUserName,"UTF-8"));
 			user.setTelPhone(telPhone);
 			user.setDealerCode(dealerCode);
-			user.setDealerName(dealerName);
+			user.setDealerName(URLDecoder.decode(dealerName,"UTF-8"));
 			// 将用户信息放到threadlocal中
 			UserLocal.setLocalUser(user);
 

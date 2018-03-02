@@ -86,4 +86,12 @@ public class UserInfo implements Serializable {
 		this.telPhone = telPhone;
 	}
 
+	@Override
+	public String toString() {
+		return "UserInfo [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name
+				+ ", description=" + description + ", telPhone=" + telPhone + ", dealerCode=" + dealerCode
+				+ ", dealerName=" + dealerName + "]";
+	}
+	
+
 }
