@@ -12,6 +12,7 @@
 		<hutool-version>3.1.2</hutool-version>
 		<aspectj-version>1.6.10</aspectj-version>
 		<slf4j-version>1.6.6</slf4j-version>
+		<tcc.version>1.2.4.20</tcc.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
@@ -149,6 +150,14 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.5.3</version>
 		</dependency>
+		
+		<!-- tcc -->
+		<dependency>
+			<groupId>org.mengyun</groupId>
+			<artifactId>tcc-transaction-api</artifactId>
+			<version>${tcc.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
