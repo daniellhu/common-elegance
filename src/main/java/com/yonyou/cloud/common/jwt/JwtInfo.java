@@ -1,6 +1,8 @@
 package com.yonyou.cloud.common.jwt;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JWT
@@ -17,6 +19,8 @@ public class JwtInfo implements Serializable,IJwtInfo {
     private String dealerName;
     private String dealerCode;
     private String telPhone;
+    private boolean kickOut;
+    private Map<String,String> params;
 
 //    public JwtInfo(String username, String userId, String name,String dealerCode,
 //    		String dealerName,String telPhone) {
@@ -27,21 +31,29 @@ public class JwtInfo implements Serializable,IJwtInfo {
 //        this.dealerName=dealerName;
 //        this.telPhone=telPhone;
 //    }
+    public JwtInfo(){
+    	
+    }
 
     public JwtInfo(String username, String userId, String name,String dealerCode,
-    		String dealerName,String telPhone,String remark) {
+    		String dealerName,String telPhone,boolean kickOut,Map<String,String> params, String remark) {
         this.username = username;
         this.userId = userId;
         this.name = name;
         this.dealerCode=dealerCode;
         this.dealerName=dealerName;
         this.telPhone=telPhone;
+        this.kickOut=kickOut;
+        this.params=params;
         this.remark = remark;
     }
 
     @Override
     public String getUniqueName() {
         return username;
+    }
+    public String getUsername() {
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -51,6 +63,10 @@ public class JwtInfo implements Serializable,IJwtInfo {
     @Override
     public String getId() {
         return userId;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
     public void setUserId(String userId) {
@@ -117,4 +133,18 @@ public class JwtInfo implements Serializable,IJwtInfo {
 		// TODO Auto-generated method stub
 		return telPhone;
 	}
+
+	@Override
+	public boolean getKickout() {
+		return kickOut;
+	}
+
+	@Override
+	public Map<String, String> getParam() {
+		if(params==null){
+			params=new HashMap();
+		}
+		return params;
+	}
+
 }

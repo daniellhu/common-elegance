@@ -1,5 +1,7 @@
 package com.yonyou.cloud.common.jwt;
 
+import java.util.Map;
+
 /**
  * 共用JWT用户对象
  * 
@@ -41,6 +43,16 @@ public interface IJwtInfo {
      * @return
      */
     String getTelPhone();
+    /**
+     * 获取账号是否互踢参数
+     * @return
+     */
+    boolean getKickout();
+    /**
+     * 获取参数值,key/value
+     * @return
+     */
+    Map<String, String> getParam();
 
     /**
      * 获取备注
