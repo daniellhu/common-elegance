@@ -88,13 +88,18 @@ public class JwtHelper {
     			map.put(paramNames[i], value);
     		}
         }
+        Object tmp=body.get(JWT_KEY_KICKOUT);
+        boolean kickOut=true;
+        if(tmp!=null){
+        	kickOut=(boolean) tmp;
+        }
         return new JwtInfo(userName, 
         		StringHelper.getObjectValue(body.get(JWT_KEY_USER_ID)), 
         		StringHelper.getObjectValue(body.get(JWT_KEY_NAME)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_DEALERCODE)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_DEALERNAME)),
         		StringHelper.getObjectValue(body.get(JWT_KEY_TELPHONE)),
-        		(boolean)body.get(JWT_KEY_KICKOUT),
+        		kickOut,
         		map,
         		StringHelper.getObjectValue(body.get(JWT_KEY_REMARK)));
     }

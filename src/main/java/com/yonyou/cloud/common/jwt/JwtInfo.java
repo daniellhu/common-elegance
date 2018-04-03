@@ -19,7 +19,7 @@ public class JwtInfo implements Serializable,IJwtInfo {
     private String dealerName;
     private String dealerCode;
     private String telPhone;
-    private boolean kickOut;
+    private boolean kickOut=true;
     private Map<String,String> params;
 
 //    public JwtInfo(String username, String userId, String name,String dealerCode,
