@@ -11,7 +11,7 @@ import java.util.Map;
  *
  */
 public class JwtInfo implements Serializable,IJwtInfo {
-	private static final long serialVersionUID = 4561940848549383659L;
+	private static final long serialVersionUID = 3561940848549383659L;
 	private String username;
     private String userId;
     private String name;
