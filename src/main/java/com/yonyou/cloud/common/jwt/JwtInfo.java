@@ -75,6 +75,9 @@ public class JwtInfo implements Serializable,IJwtInfo {
 
     @Override
     public String getName() {
+    	if(name==null){
+    		name="";
+    	}
         return name;
     }
 
