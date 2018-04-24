@@ -1,6 +1,7 @@
 package com.yonyou.cloud.common.vo.user;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 用户信息
@@ -20,7 +21,18 @@ public class UserInfo implements Serializable {
 	private String telPhone;
 	private String dealerCode;
 	private String dealerName;
+	
+	
+	private Map<String, String> attrMap;
 
+
+	public Map<String, String> getAttrMap() {
+		return attrMap;
+	}
+
+	public void setAttrMap(Map<String, String> attrMap) {
+		this.attrMap = attrMap;
+	}
 
 	public String getDealerName() {
 		return dealerName;
@@ -90,7 +102,7 @@ public class UserInfo implements Serializable {
 	public String toString() {
 		return "UserInfo [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name
 				+ ", description=" + description + ", telPhone=" + telPhone + ", dealerCode=" + dealerCode
-				+ ", dealerName=" + dealerName + "]";
+				+ ", dealerName=" + dealerName + ", attrMap=" + attrMap + "]";
 	}
 	
 

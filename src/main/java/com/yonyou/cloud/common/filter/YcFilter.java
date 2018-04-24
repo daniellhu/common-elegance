@@ -1,7 +1,9 @@
 package com.yonyou.cloud.common.filter;
 
 import java.io.IOException;
-import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,11 +44,11 @@ public class YcFilter implements Filter {
 	 * header中的dealerCode
 	 */
 	private static final String HEADER_DEALER_CODE = "dealercode";
-	
+
 	/**
 	 * header中的dealerName
 	 */
-	private static final String HEADER_DEALER_NAME = "dealername";
+//	private static final String HEADER_DEALER_NAME = "dealername";
 
 	/**
 	 * header中的TEL_PHONE
@@ -56,7 +58,7 @@ public class YcFilter implements Filter {
 	/**
 	 * header中userName
 	 */
-	private static final String HEADER_USER_NAME = "username";
+//	private static final String HEADER_USER_NAME = "username";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -67,35 +69,65 @@ public class YcFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		log.info("YcFilter is getting userinfo from header");
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		// 操作的用户id
-		String optUserId = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_ID);
+//		String optUserId = request.getHeader(HEADER_USER_ID);
 		// 操作的用户类型
-		String optUserName = ((HttpServletRequest) servletRequest).getHeader(HEADER_USER_NAME);
+		// String optUserName = ((HttpServletRequest)
+		// servletRequest).getHeader(HEADER_USER_NAME);
 		// 操作的用户所属经销商
-		String dealerCode = ((HttpServletRequest) servletRequest).getHeader(HEADER_DEALER_CODE);
+//		String dealerCode = request.getHeader(HEADER_DEALER_CODE);
 		// 操作的用户所属经销商
-		String dealerName = ((HttpServletRequest) servletRequest).getHeader(HEADER_DEALER_NAME);
+		// String dealerName = ((HttpServletRequest)
+		// servletRequest).getHeader(HEADER_DEALER_NAME);
 		// 操作的用户手机号
-		String telPhone = ((HttpServletRequest) servletRequest).getHeader(HEADER_TEL_PHONE);
+//		String telPhone = request.getHeader(HEADER_TEL_PHONE);
 
+		Enumeration<String> e = ((HttpServletRequest) servletRequest).getHeaderNames();
 		UserInfo user = new UserInfo();
-		if (optUserId != null) {
-			user.setId(optUserId);
-			user.setUsername(URLDecoder.decode(optUserName,"UTF-8"));
-			user.setTelPhone(telPhone);
-			user.setDealerCode(dealerCode);
-			user.setDealerName(URLDecoder.decode(dealerName,"UTF-8"));
+		Map<String,String> attrMap = new HashMap<String,String>();
+				
+		// 遍历头部信息集
+		while (e.hasMoreElements()) {
+			// 取出信息名
+			String name = (String) e.nextElement();
+			// 取出信息值
+			String value = request.getHeader(name);
+			
+			if(name.equals(HEADER_USER_ID)) {
+				user.setId(value);
+				MDC.put(USER_KEY, value);
+			}else if(name.equals(HEADER_TEL_PHONE)) {
+				user.setTelPhone(value);	
+			}else if(name.equals(HEADER_DEALER_CODE)) {
+				user.setDealerCode(value);
+			}else {
+				attrMap.put(name, value);
+			}
+			
+			log.info("header name "+ name +" = " + value);
+		}
+		
+		user.setAttrMap(attrMap);
+		UserLocal.setLocalUser(user);
+
+//		if (optUserId != null) {
+//			user.setId(optUserId);
+			// user.setUsername(URLDecoder.decode(optUserName,"UTF-8"));
+//			user.setTelPhone(telPhone);
+//			user.setDealerCode(dealerCode);
+			// user.setDealerName(URLDecoder.decode(dealerName,"UTF-8"));
 			// 将用户信息放到threadlocal中
-			UserLocal.setLocalUser(user);
+//			UserLocal.setLocalUser(user);
 
 			// 将用户信息放发哦slf4j中，方便日志打印
-			MDC.put(USER_KEY, optUserId);
+//			MDC.put(USER_KEY, optUserId);
 
-			log.info("YcFilter has set userInfo to threadlocal and log");
-		} else {
-
-			log.warn("this request has no userInfo use default");
-		}
+//			log.info("YcFilter has set userInfo to threadlocal and log");
+//		} else {
+//
+//			log.warn("this request has no userInfo use default");
+//		}
 
 		filterChain.doFilter(servletRequest, servletResponse);
 
