@@ -45,10 +45,12 @@ public class ApiAspect {
             if (pjp.getArgs() != null && pjp.getArgs().length > 0) {
                 logger.info(fullMethodName + " will be invoke , here is the params :");
                 for (Object arg : pjp.getArgs()) {
-                		if(!JSONUtil.toJsonStr(arg).equals("{}")) {
-                			logger.info(JSONUtil.toJsonStr(arg));
-                		}else {
-                			logger.info(String.valueOf(arg));
+                		if(arg!=null) {
+	                		if(!JSONUtil.toJsonStr(arg).equals("{}")) {
+	                			logger.info(JSONUtil.toJsonStr(arg));
+	                		}else {
+	                			logger.info(String.valueOf(arg));
+	                		}
                 		}
                 }
             } else {
