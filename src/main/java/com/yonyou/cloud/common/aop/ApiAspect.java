@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.xiaoleilu.hutool.json.JSONUtil;
 import com.xiaoleilu.hutool.util.NumberUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
 import com.yonyou.cloud.common.beans.PageResultResponse;
@@ -38,8 +39,23 @@ public class ApiAspect {
 		String className = pjp.getTarget().getClass().getName();
 		String methodName = pjp.getSignature().getName();
 		String fullMethodName = className + "." + methodName;
-
-		logger.info(fullMethodName + "将被调用");
+		
+		//记录参数,并对参数进行校验
+        if (!className.contains("com.sun.proxy.$Proxy") && !className.contains("$$EnhancerBySpringCGLIB$$")) {
+            if (pjp.getArgs() != null && pjp.getArgs().length > 0) {
+                logger.info(fullMethodName + " will be invoke , here is the params :");
+                for (Object arg : pjp.getArgs()) {
+                		if(!JSONUtil.toJsonStr(arg).equals("{}")) {
+                			logger.info(JSONUtil.toJsonStr(arg));
+                		}else {
+                			logger.info(String.valueOf(arg));
+                		}
+                }
+            } else {
+                logger.info(fullMethodName + " will be invoke");
+            }
+        }
+		
 
 		Object result = null;
 		result = pjp.proceed();

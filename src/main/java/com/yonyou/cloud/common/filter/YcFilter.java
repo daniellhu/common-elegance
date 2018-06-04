@@ -68,7 +68,6 @@ public class YcFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
-		log.info("YcFilter is getting userinfo from header");
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		// 操作的用户id
 //		String optUserId = request.getHeader(HEADER_USER_ID);
@@ -82,7 +81,14 @@ public class YcFilter implements Filter {
 		// servletRequest).getHeader(HEADER_DEALER_NAME);
 		// 操作的用户手机号
 //		String telPhone = request.getHeader(HEADER_TEL_PHONE);
-
+		
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		
+		log.info("uri-->"+uri);
+		log.info("method-->"+method);
+		
+		log.info("YcFilter is getting userinfo from header");
 		Enumeration<String> e = ((HttpServletRequest) servletRequest).getHeaderNames();
 		UserInfo user = new UserInfo();
 		Map<String,String> attrMap = new HashMap<String,String>();
@@ -94,12 +100,12 @@ public class YcFilter implements Filter {
 			// 取出信息值
 			String value = request.getHeader(name);
 			
-			if(name.equals(HEADER_USER_ID)) {
+			if(HEADER_USER_ID.equals(name)) {
 				user.setId(value);
 				MDC.put(USER_KEY, value);
-			}else if(name.equals(HEADER_TEL_PHONE)) {
+			}else if(HEADER_TEL_PHONE.equals(name)) {
 				user.setTelPhone(value);	
-			}else if(name.equals(HEADER_DEALER_CODE)) {
+			}else if(HEADER_DEALER_CODE.equals(name)) {
 				user.setDealerCode(value);
 			}else {
 				attrMap.put(name, value);
