@@ -111,7 +111,7 @@ public class YcFilter implements Filter {
 				attrMap.put(name, value);
 			}
 			
-			log.info("header name "+ name +" = " + value);
+//			log.info("header name "+ name +" = " + value);
 		}
 		
 		user.setAttrMap(attrMap);
