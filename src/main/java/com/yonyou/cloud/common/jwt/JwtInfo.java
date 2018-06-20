@@ -14,13 +14,20 @@ public class JwtInfo implements Serializable,IJwtInfo {
 	private static final long serialVersionUID = 3561940848549383659L;
 	private String username;
     private String userId;
+    private String id;
     private String name;
     private String remark;
     private String dealerName;
     private String dealerCode;
     private String telPhone;
-    private boolean kickOut=true;
-    private Map<String,String> params;
+    private String uniqueName;
+    
+    public void setUniqueName(String uniqueName) {
+		this.uniqueName = uniqueName;
+	}
+
+	private boolean kickout=true;
+    private Map<String,String> param;
 
 //    public JwtInfo(String username, String userId, String name,String dealerCode,
 //    		String dealerName,String telPhone) {
@@ -38,13 +45,17 @@ public class JwtInfo implements Serializable,IJwtInfo {
     public JwtInfo(String username, String userId, String name,String dealerCode,
     		String dealerName,String telPhone,boolean kickOut,Map<String,String> params, String remark) {
         this.username = username;
+        //同时设置uniqueName=username
+        this.uniqueName=username;
         this.userId = userId;
+        //同时设置id = userId
+        this.id=userId;
         this.name = name;
         this.dealerCode=dealerCode;
         this.dealerName=dealerName;
         this.telPhone=telPhone;
-        this.kickOut=kickOut;
-        this.params=params;
+        this.kickout=kickOut;
+        this.param=params;
         this.remark = remark;
     }
 
@@ -57,6 +68,7 @@ public class JwtInfo implements Serializable,IJwtInfo {
     }
 
     public void setUsername(String username) {
+    	 	this.uniqueName=username;
         this.username = username;
     }
 
@@ -139,15 +151,15 @@ public class JwtInfo implements Serializable,IJwtInfo {
 
 	@Override
 	public boolean getKickout() {
-		return kickOut;
+		return kickout;
 	}
 
 	@Override
 	public Map<String, String> getParam() {
-		if(params==null){
-			params=new HashMap();
+		if(param==null){
+			param=new HashMap();
 		}
-		return params;
+		return param;
 	}
 
 }
