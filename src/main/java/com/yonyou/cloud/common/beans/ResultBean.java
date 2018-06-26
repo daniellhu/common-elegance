@@ -52,7 +52,7 @@ public class ResultBean implements Serializable {
 	}
 
 	public void setElapsedMilliseconds(long elapsedMilliseconds) {
-		elapsedMilliseconds = elapsedMilliseconds;
+		this.elapsedMilliseconds = elapsedMilliseconds;
 	}
 
 
