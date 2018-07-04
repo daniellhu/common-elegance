@@ -1,6 +1,7 @@
 package com.yonyou.cloud.common.filter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class YcFilter implements Filter {
 	/**
 	 * header中的dealerName
 	 */
-//	private static final String HEADER_DEALER_NAME = "dealername";
+	private static final String HEADER_DEALER_NAME = "dealername";
 
 	/**
 	 * header中的TEL_PHONE
@@ -58,7 +59,7 @@ public class YcFilter implements Filter {
 	/**
 	 * header中userName
 	 */
-//	private static final String HEADER_USER_NAME = "username";
+	private static final String HEADER_USER_NAME = "username";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -107,6 +108,10 @@ public class YcFilter implements Filter {
 				user.setTelPhone(value);	
 			}else if(HEADER_DEALER_CODE.equals(name)) {
 				user.setDealerCode(value);
+			}else if(HEADER_DEALER_NAME.equals(name)) {
+				user.setDealerName(URLDecoder.decode(value,"UTF-8"));
+			}else if(HEADER_USER_NAME.equals(name)) {
+				user.setUsername(URLDecoder.decode(value,"UTF-8"));
 			}else {
 				attrMap.put(name, value);
 			}
@@ -119,16 +124,16 @@ public class YcFilter implements Filter {
 
 //		if (optUserId != null) {
 //			user.setId(optUserId);
-			// user.setUsername(URLDecoder.decode(optUserName,"UTF-8"));
+//			// user.setUsername(URLDecoder.decode(optUserName,"UTF-8"));
 //			user.setTelPhone(telPhone);
 //			user.setDealerCode(dealerCode);
-			// user.setDealerName(URLDecoder.decode(dealerName,"UTF-8"));
-			// 将用户信息放到threadlocal中
+//			// user.setDealerName(URLDecoder.decode(dealerName,"UTF-8"));
+//			// 将用户信息放到threadlocal中
 //			UserLocal.setLocalUser(user);
-
-			// 将用户信息放发哦slf4j中，方便日志打印
+//
+//			// 将用户信息放发哦slf4j中，方便日志打印
 //			MDC.put(USER_KEY, optUserId);
-
+//
 //			log.info("YcFilter has set userInfo to threadlocal and log");
 //		} else {
 //
