@@ -203,15 +203,16 @@
         		<url>http://dev-pv.saicmotor.com:9090/nexus/content/repositories/snapshots/</url>  
 	    </snapshotRepository>   -->
 		
-		 <snapshotRepository>
+		 <!-- <snapshotRepository>
 	        <id>nexus-snapshots</id>
 	        <name>user snapshot</name>
 	        <url>http://dce.carapptest.gtmc.com.cn:32081/repository/maven-snapshots/</url>
+	    </snapshotRepository> -->
+	    <snapshotRepository>
+	    		<id>nexus-snapshots</id>
+	        <name>user snapshot</name>
+	        <url>http://10.180.8.200:32000/repository/maven-snapshots/</url>
 	    </snapshotRepository>
 	</distributionManagement>
-	
-	
-
-
 
 </project>
