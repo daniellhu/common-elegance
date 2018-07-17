@@ -56,7 +56,7 @@ public class BaseController<Service extends BaseService,Entity> {
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     @ResponseBody
     @YcApi
-    public RestResultResponse<Entity> get(@PathVariable int id){
+    public RestResultResponse<Entity> get(@PathVariable(value="id") int id){
         return new RestResultResponse<Entity>().success(true).data(baseService.selectById(id));
     }
 
