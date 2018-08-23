@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.yonyou.cloud</groupId>
 	<artifactId>common-elegance</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>common</name>
 	<description>优雅编码的common类库</description>
 
@@ -48,10 +48,16 @@
 		</dependency>
 
 		<!-- starter -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 			<version>1.5.8.RELEASE</version>
+		</dependency>
+		 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.10</version>
 		</dependency>
 
 		<!-- common-utils -->

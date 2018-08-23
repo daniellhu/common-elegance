@@ -47,5 +47,9 @@ UserLocal.getLocalUser();
 ```
 
  那么在logback.xml中，即可在layout中通过声明“%X{user}”来打印此信息。
+ 
+## updates
+0.0.4.SNAPSHOT 去掉了starter的依赖
+ 
 
 
